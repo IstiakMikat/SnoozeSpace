@@ -1,0 +1,29 @@
+{
+  "name": "book-a-bunk-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.16.0",
+    "nodemon": "^3.1.10"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noobhacker32003/Book-a-bunk-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/noobhacker32003/Book-a-bunk-server/issues"
+  },
+  "homepage": "https://github.com/noobhacker32003/Book-a-bunk-server#readme",
+  "description": ""
+}
