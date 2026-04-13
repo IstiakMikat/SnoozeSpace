@@ -34,3 +34,13 @@ lerna-debug.log*
 
 # Vercel
 .vercel/
+
+# Temporary files
+err.txt
+gh_err.txt
+gh_help.txt
+gh_help_err.txt
+gh_login.bat
+gh_out.txt
+gh_push.bat
+out.txt
