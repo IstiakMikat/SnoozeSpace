@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const dns = require('dns');
 require('dotenv').config();
+
+dns.setServers(['8.8.8.8', '1.1.1.1']);
 const port = process.env.PORT || 5000;
 
 const app = express();
@@ -10,11 +13,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const password = encodeURIComponent(process.env.DB_PASSWORD);
+const uri = `mongodb+srv://mikat7b:${password}@cluster0.0swp6h9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-const uri =`mongodb+srv://mikat7b:${process.env.pass}@cluster0.0swp6h9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-  //`mongodb+srv://book-a-bunk:{process.env.pass}$@cluster0.fjfms.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-
-
+//const uri =`mongodb+srv://mikat7b:<db_password>@cluster0.0swp6h9.mongodb.net/?appName=Cluster0&retryWrites=true&w=majority`.replace('<db_password>', process.env.pass);
+ 
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -31,7 +34,9 @@ async function run() {
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
-        app.get('/rooms', async(req, res) => {
+        // All database routes are defined here
+
+          app.get('/rooms', async (req, res) => {
             const db = client.db("Snooze_Space");
             const roomsCollection = db.collection("rooms");
             const rooms = await roomsCollection.find().toArray();
@@ -295,11 +300,48 @@ async function run() {
 }
 run().catch(console.dir);
 
+// Fallback routes for development (when MongoDB is not available)
+app.get('/rooms', (req, res) => {
+    res.json([
+        {
+            id: 1,
+            title: "Deluxe Room",
+            description: "A comfortable deluxe room with all amenities",
+            pricePerNight: 150,
+            image: "/Images/Image1.jpg"
+        },
+        {
+            id: 2,
+            title: "Standard Room",
+            description: "A cozy standard room perfect for studying",
+            pricePerNight: 100,
+            image: "/Images/Image1.png"
+        }
+    ]);
+});
+
+app.get('/studyRooms', (req, res) => {
+    res.json([
+        {
+            id: 1,
+            title: "Group Study Room A",
+            description: "Large study room for group collaboration",
+            image: "/Images/Image1.jpg"
+        },
+        {
+            id: 2,
+            title: "Quiet Study Room B",
+            description: "Peaceful individual study space",
+            image: "/Images/Image1.png"
+        }
+    ]);
+});
+
 app.get('/', (req, res) => {
-    res.send('Its working')
+    res.send('Server is running! MongoDB connection may have failed, but basic routes are available.')
 })
 
-app.listen(port, () => {
-    console.log(`server working in port: ${port}`);
-})
+const server = app.listen(0, () => {
+  console.log(`Server is running on port ${server.address().port}`);
+});
 
